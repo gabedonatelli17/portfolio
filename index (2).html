@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gabriel Donatelli — Sports Business Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;500;600;700&family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0b1f3a;
+    --navy-deep:#071528;
+    --navy-mid:#132c52;
+    --gold:#bca779;
+    --gold-bright:#d4c49a;
+    --white:#ffffff;
+    --off:#f5f6f8;
+    --line:rgba(255,255,255,0.14);
+    --line-dark:rgba(11,31,58,0.14);
+    --font-display:'Anton', sans-serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'Roboto Mono', monospace;
+    --radius:6px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--off); color:var(--navy); font-family:var(--font-body);
+    line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{font-family:var(--font-display); font-weight:400; letter-spacing:.02em; margin:0; color:var(--navy);}
+  p{margin:0 0 1em;}
+  a{color:inherit;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 24px;}
+  .eyebrow{font-family:var(--font-mono); text-transform:uppercase; letter-spacing:.18em; font-size:.72rem; color:var(--gold); font-weight:700;}
+
+  /* ---------- NAV ---------- */
+  #nav{position:sticky; top:0; z-index:500; background:var(--navy); border-bottom:3px solid var(--gold); }
+  #nav .wrap{display:flex; align-items:center; justify-content:space-between; height:66px; gap:18px;}
+  #nav .brand{color:var(--gold); font-family:var(--font-display); font-size:1.3rem; letter-spacing:.04em; white-space:nowrap;}
+  #nav .brand span{color:var(--gold);}
+  #navlinks{display:flex; gap:4px; flex-wrap:wrap; overflow-x:auto;}
+  #navlinks a{color:var(--white); text-decoration:none; font-size:.78rem; font-family:var(--font-mono); text-transform:uppercase; letter-spacing:.08em; padding:8px 10px; border-radius:4px; opacity:.85; white-space:nowrap;}
+  #navlinks a:hover{opacity:1; background:rgba(255,255,255,.08); color:var(--gold-bright);}
+  .navctrls{display:flex; gap:8px; align-items:center;}
+  .admin-btn{display:none;}
+  body.editing .admin-btn{display:inline-flex;}
+  #nav .brand{cursor:default;}
+  .btn{
+    font-family:var(--font-mono); font-size:.72rem; text-transform:uppercase; letter-spacing:.08em;
+    border:1px solid var(--gold); background:transparent; color:var(--gold); padding:9px 14px;
+    border-radius:4px; cursor:pointer; white-space:nowrap; transition:.15s;
+  }
+  .btn:hover{background:var(--gold); color:var(--navy-deep);}
+  .btn.solid{background:var(--gold); color:var(--navy-deep);}
+  .btn.solid:hover{background:var(--gold-bright);}
+  #saveBtnNav.needs-save::after{content:" ●"; color:#ff5c5c;}
+  .btn.small{padding:6px 10px; font-size:.65rem;}
+  #editBar{display:none; background:var(--navy-deep); border-bottom:1px solid var(--line);}
+  #editBar.on{display:block;}
+  #editBar .wrap{display:flex; gap:10px; align-items:center; padding:10px 24px; flex-wrap:wrap;}
+  #editBar label{color:var(--white); font-family:var(--font-mono); font-size:.68rem; text-transform:uppercase; letter-spacing:.08em; margin-right:4px;}
+  #editBar select{font-family:var(--font-mono); font-size:.72rem; padding:6px 8px; border-radius:4px; border:1px solid var(--line); background:var(--navy); color:var(--white);}
+  body.editing .editable{outline:1.5px dashed rgba(201,162,39,.6); outline-offset:2px; cursor:text; border-radius:2px;}
+  body.editing .editable:focus{outline:1.5px solid var(--gold); background:rgba(201,162,39,.06);}
+  body.editing .imgslot{cursor:pointer; position:relative;}
+  body.editing .imgslot::after{content:"⤒ upload"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    background:rgba(11,31,58,.55); color:var(--gold-bright); font-family:var(--font-mono); font-size:.65rem; text-transform:uppercase; letter-spacing:.08em; opacity:0; transition:.15s;}
+  body.editing .imgslot:hover::after{opacity:1;}
+  .tabdelete{display:none; position:absolute; top:-8px; right:-8px; width:20px; height:20px; border-radius:50%; background:#a33; color:#fff; border:2px solid var(--off); font-size:.7rem; line-height:1; cursor:pointer; align-items:center; justify-content:center;}
+  body.editing .tabdelete{display:flex;}
+  .addtab{display:none;}
+  body.editing .addtab{display:inline-flex;}
+
+  /* ---------- HERO ---------- */
+  #hero{background:linear-gradient(180deg,var(--navy) 0%, var(--navy-mid) 78%, var(--navy) 100%); color:var(--white); position:relative; overflow:hidden; padding:70px 0 0;}
+  #hero::before{content:""; position:absolute; inset:0; background-image:
+     linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+     linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+     background-size:38px 38px; pointer-events:none;}
+  .hero-grid{display:grid; grid-template-columns:1.15fr .85fr; gap:48px; align-items:center; position:relative; padding-bottom:44px;}
+  .hero-name{font-size:clamp(2.6rem,5.4vw,4.6rem); line-height:.98; margin:10px 0 6px; color:var(--gold);}
+  .hero-name em{font-style:normal; color:var(--gold);}
+  .hero-role{font-family:var(--font-mono); letter-spacing:.1em; font-size:1rem; text-transform:uppercase; color:var(--gold-bright); margin-bottom:18px;}
+  .hero-copy{max-width:56ch; color:rgba(255,255,255,.86); font-size:1.02rem;}
+  .hero-photo-wrap{position:relative; justify-self:center;}
+  .hero-photo{width:280px; height:340px; border-radius:6px; overflow:hidden; border:4px solid var(--gold); background:#1a3050 url('') center/cover; box-shadow:0 20px 50px rgba(0,0,0,.4);}
+  .hero-photo img{width:100%; height:100%; object-fit:cover;}
+  .scorebug{position:absolute; bottom:-26px; left:-26px; background:var(--navy-deep); border:2px solid var(--gold); border-radius:6px; padding:10px 16px; font-family:var(--font-mono); color:var(--gold-bright); box-shadow:0 8px 20px rgba(0,0,0,.35);}
+  .scorebug small{display:block; font-size:.6rem; letter-spacing:.12em; color:rgba(255,255,255,.6); text-transform:uppercase;}
+  .scoreboard{background:var(--navy-deep); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .scoreboard .wrap{display:flex; flex-wrap:wrap; justify-content:center;}
+  .scorecell{padding:22px 28px; text-align:center; border-left:1px solid var(--line); position:relative;}
+  .scorecell:first-child{border-left:none;}
+  .stat-delete{display:none;}
+  body.editing .stat-delete{
+    display:flex; align-items:center; justify-content:center; position:absolute; top:4px; right:4px;
+    width:18px; height:18px; border-radius:50%; background:#a33; color:#fff; font-size:.65rem; cursor:pointer; line-height:1;
+  }
+  .scorenum{font-family:var(--font-mono); font-size:2rem; color:var(--gold-bright); font-weight:700; text-shadow:0 0 18px rgba(232,194,94,.35);}
+  .scorelabel{font-family:var(--font-mono); font-size:.62rem; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.65); margin-top:4px;}
+
+  /* ---------- SECTION GENERIC ---------- */
+  section{padding:76px 0;}
+  .section-head{margin-bottom:36px; max-width:70ch; position:relative;}
+  .section-head h2{font-size:clamp(1.8rem,3.2vw,2.6rem); margin-top:6px;}
+  .divider{height:3px; width:56px; background:var(--gold); margin:14px 0 0;}
+
+  /* ---------- FUNDAMENTALS ---------- */
+  #fundamentals{background:var(--white); border-top:1px solid var(--line-dark);}
+  .fund-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:22px;}
+  .fund-card{background:var(--off); border:1px solid var(--line-dark); border-left:4px solid var(--gold); border-radius:4px; padding:26px 26px 20px;}
+  .fund-card h3{font-size:1.3rem; margin-bottom:10px;}
+  .fund-body{max-height:150px; overflow:hidden; position:relative; font-size:.94rem; color:#333;}
+  .fund-body.open{max-height:none;}
+  .fund-body:not(.open)::after{content:""; position:absolute; left:0; right:0; bottom:0; height:50px; background:linear-gradient(transparent, var(--off));}
+  .fund-toggle{margin-top:10px; background:none; border:none; color:var(--navy); font-family:var(--font-mono); font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; cursor:pointer; padding:0; border-bottom:1px solid var(--gold);}
+
+  /* ---------- TAB CAROUSEL (shared: expertise / trips / projects) ---------- */
+  .tabsection{position:relative;}
+  .tabrow{display:flex; gap:14px; overflow-x:auto; padding:6px 4px 20px; scrollbar-width:thin;}
+  .tabrow::-webkit-scrollbar{height:7px;}
+  .tabrow::-webkit-scrollbar-thumb{background:var(--gold); border-radius:4px;}
+  .tabcard{position:relative; flex:0 0 auto; width:190px; min-height:120px; cursor:pointer; border-radius:6px; padding:16px 14px; transition:transform .15s, box-shadow .15s;}
+  body.editing .tabcard{cursor:grab;}
+  .tabcard.dragging{opacity:.4;}
+  .tabcard.tab-hidden{opacity:.5; outline:2px dashed #a33; outline-offset:-2px;}
+  .tab-hide-btn{display:none;}
+  body.editing .tab-hide-btn{
+    display:inline-flex; align-items:center; position:absolute; top:-9px; left:-9px;
+    background:var(--navy); color:#fff; border:2px solid var(--off); border-radius:12px; padding:2px 8px;
+    font-size:.58rem; font-family:var(--font-mono); text-transform:uppercase; letter-spacing:.03em; cursor:pointer; white-space:nowrap; z-index:2;
+  }
+  .tab-hide-btn:hover{background:var(--navy-mid);}
+  .tabcard:hover{transform:translateY(-4px);}
+  .tabcard .tnum{font-family:var(--font-mono); font-size:.65rem; letter-spacing:.1em;}
+  .tabcard .tlabel{font-family:var(--font-display); font-size:1.05rem; line-height:1.15; margin-top:8px;}
+  .tabcard .tdate{font-family:var(--font-mono); font-size:.66rem; margin-top:8px; opacity:.75;}
+  .tab-viewcue{font-family:var(--font-mono); font-size:.6rem; text-transform:uppercase; letter-spacing:.07em; margin-top:12px; opacity:.7; transition:.15s;}
+  .tabcard:hover .tab-viewcue{opacity:1; transform:translateX(3px);}
+  .badge .tab-viewcue{color:var(--gold-bright);}
+  .ticket .tab-viewcue{color:var(--navy);}
+  .folder .tab-viewcue{color:var(--navy);}
+
+  /* expertise = access-pass badge */
+  .badge{background:var(--navy); color:var(--white); border:1px solid var(--line); box-shadow:0 8px 20px rgba(11,31,58,.18);}
+  .badge::before{content:""; position:absolute; top:8px; left:50%; transform:translateX(-50%); width:22px; height:22px; border-radius:50%; background:var(--off); border:2px solid var(--gold);}
+  .badge{padding-top:36px;}
+  .badge .tnum{color:var(--gold-bright);}
+
+  /* trips = ticket stub */
+  .ticket{background:var(--white); border:2px dashed var(--navy); position:relative;}
+  .ticket::before, .ticket::after{content:""; position:absolute; width:16px; height:16px; background:var(--off); border-radius:50%; top:50%; transform:translateY(-50%);}
+  .ticket::before{left:-9px;} .ticket::after{right:-9px;}
+  .ticket .tnum{color:var(--gold);}
+
+  /* projects = folder tab */
+  .folder{background:var(--off); border:1px solid var(--line-dark); border-top:6px solid var(--navy);}
+  .folder .tnum{color:var(--navy); opacity:.55;}
+
+  .tabdelete{ }
+
+  /* ---------- MODAL ---------- */
+  .modal-backdrop{display:none; position:fixed; inset:0; background:rgba(6,14,28,.72); z-index:900; align-items:flex-start; justify-content:center; overflow-y:auto; padding:40px 16px;}
+  .modal-backdrop.open{display:flex;}
+  .modal{background:var(--white); max-width:820px; width:100%; border-radius:8px; border-top:6px solid var(--gold); padding:36px; position:relative; margin-bottom:40px;}
+  .modal-close{position:absolute; top:14px; right:16px; background:none; border:none; font-size:1.4rem; cursor:pointer; color:var(--navy); line-height:1;}
+  .modal h3{font-size:1.7rem; margin-bottom:4px;}
+  .modal .mdate{font-family:var(--font-mono); font-size:.75rem; color:var(--gold); text-transform:uppercase; letter-spacing:.08em; margin-bottom:16px;}
+  .modal-body{font-size:.96rem; color:#282828; white-space:pre-line;}
+  .modal-body p{margin:0 0 1em;}
+  .gallery{display:flex; flex-wrap:wrap; justify-content:center; align-items:flex-start; gap:16px; margin-top:22px;}
+  .gallery .photo-item{display:flex; flex-direction:column; gap:6px;}
+  .gallery .photo-item.dragging{opacity:.35;}
+  .photo-draghandle{display:none;}
+  body.editing .photo-draghandle{
+    display:flex; align-items:center; justify-content:center; gap:5px;
+    background:var(--navy); color:var(--gold-bright); border-radius:4px; padding:4px 0;
+    font-family:var(--font-mono); font-size:.62rem; text-transform:uppercase; letter-spacing:.05em;
+    cursor:grab; user-select:none;
+  }
+  body.editing .photo-draghandle:active{cursor:grabbing;}
+  .gallery .imgslot{position:relative; background:var(--off); border:1px dashed var(--line-dark); border-radius:4px; overflow:hidden; display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:.6rem; color:#999; text-align:center;}
+  .gallery .imgslot img{width:100%; height:100%; object-fit:cover; pointer-events:none;}
+  .resize-handle{display:none;}
+  body.editing .resize-handle{
+    display:block; position:absolute; right:3px; bottom:3px; width:20px; height:20px;
+    background:var(--gold); border:2px solid var(--navy); border-radius:4px;
+    cursor:nwse-resize; z-index:5; box-shadow:0 1px 4px rgba(0,0,0,.35);
+  }
+  body.editing .resize-handle::after{
+    content:""; position:absolute; right:4px; bottom:4px; width:8px; height:8px;
+    border-right:2px solid var(--navy); border-bottom:2px solid var(--navy);
+  }
+  .photo-controls{display:none;}
+  body.editing .photo-controls{display:flex; gap:6px; flex-shrink:0;}
+  .size-btn{flex:1; background:var(--navy); color:#fff; border:none; border-radius:4px; padding:7px 0; font-family:var(--font-mono); font-size:.6rem; text-transform:uppercase; letter-spacing:.04em; cursor:pointer;}
+  .size-btn:hover{background:var(--navy-mid);}
+  .size-btn.remove-btn{background:#a33;}
+  .size-btn.remove-btn:hover{background:#c44;}
+  .gallery-hint{display:none; font-family:var(--font-mono); font-size:.68rem; color:#888; margin-top:10px; text-align:center;}
+  body.editing .gallery-hint{display:block;}
+
+  /* ---------- FORMAT TOOLBAR ---------- */
+  .format-toolbar{position:absolute; display:none; z-index:2000; background:var(--navy-deep); border:1px solid var(--gold); border-radius:8px; padding:8px; gap:6px; align-items:center; box-shadow:0 10px 28px rgba(0,0,0,.4); flex-wrap:wrap; max-width:340px;}
+  .format-toolbar.show{display:flex;}
+  .format-toolbar .fb{background:transparent; border:1px solid var(--line); color:#fff; padding:6px 9px; border-radius:4px; cursor:pointer; font-family:var(--font-mono); font-size:.72rem; line-height:1;}
+  .format-toolbar .fb:hover{background:rgba(255,255,255,.12);}
+  .format-toolbar .fdiv{width:1px; align-self:stretch; background:var(--line); margin:0 2px;}
+  .format-toolbar .swatch{width:20px; height:20px; border-radius:4px; border:1px solid rgba(255,255,255,.4); cursor:pointer; padding:0;}
+  .modal-links{margin-top:18px; font-size:.85rem; font-family:var(--font-mono);}
+
+  /* ---------- PROJECT MODAL EXTRAS ---------- */
+  .proj-file{margin-top:16px; padding:14px; border:1px dashed var(--line-dark); border-radius:6px; font-size:.85rem;}
+  .proj-file a.filebtn{display:inline-block; margin-top:8px;}
+  .proj-upload-controls{display:none;}
+  body.editing .proj-upload-controls{display:block;}
+  body.editing .proj-link-line{display:block !important;}
+
+  .linked-projects{margin-top:26px; padding-top:20px; border-top:1px solid var(--line-dark);}
+  .linked-projects.hidden-section{display:none;}
+  .linked-projects-head{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+  .remove-section-btn{display:none;}
+  body.editing .remove-section-btn{display:inline-block; background:none; border:none; color:#a33; font-family:var(--font-mono); font-size:.65rem; text-transform:uppercase; letter-spacing:.05em; cursor:pointer; text-decoration:underline;}
+  .restore-section-btn{display:none; margin-top:20px;}
+  body.editing .restore-section-btn.show{display:inline-flex;}
+  .chip-row{display:flex; flex-wrap:wrap; gap:8px;}
+  .linkcard{width:165px; min-height:150px; padding:16px 14px; cursor:default; box-shadow:0 4px 14px rgba(11,31,58,.08); transition:transform .18s, box-shadow .18s;}
+  .linkcard:hover{transform:translateY(-5px); box-shadow:0 12px 24px rgba(11,31,58,.16);}
+  body.editing .linkcard{cursor:default;}
+  .linkcard-icon{width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.15rem; margin-bottom:10px;}
+  .linkcard.folder .linkcard-icon{background:rgba(11,31,58,.08);}
+  .linkcard.ticket .linkcard-icon{background:rgba(201,162,39,.14);}
+  .linkcard .tlabel{font-size:.88rem; font-weight:600; cursor:pointer; line-height:1.25;}
+  .linkcard .tab-viewcue{
+    cursor:pointer; margin-top:12px; display:inline-block; padding:5px 10px; border-radius:14px;
+    background:var(--navy); color:var(--gold-bright); font-size:.58rem; opacity:1; transition:.15s;
+  }
+  .linkcard.ticket .tab-viewcue{background:var(--off); color:var(--navy); border:1px solid var(--navy);}
+  .linkcard .tab-viewcue:hover{background:var(--gold); color:var(--navy-deep);}
+  .linkcard.ticket .tab-viewcue:hover{background:var(--navy); color:var(--gold-bright); border-color:var(--navy);}
+  .linked-row.tabrow{padding-top:0;}
+  .chip-empty{font-family:var(--font-mono); font-size:.78rem; color:#888;}
+  .link-controls{display:none;}
+  body.editing .link-controls{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;}
+  .link-controls select{font-family:var(--font-mono); font-size:.72rem; padding:7px 8px; border-radius:4px; border:1px solid var(--line-dark); background:var(--white); color:var(--navy);}
+
+  /* ---------- EXPERIENCE ---------- */
+  #experience{background:var(--navy); color:var(--white);}
+  #experience .section-head h2{color:var(--white);}
+  .exp-row{display:flex; align-items:center; gap:20px; padding:20px 0; border-bottom:1px solid var(--line);}
+  .exp-row:last-child{border-bottom:none;}
+  .exp-logo{width:64px; height:64px; border-radius:6px; background:#ffffff; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; overflow:hidden; flex:0 0 auto; font-family:var(--font-mono); font-size:.55rem; color:rgba(11,31,58,.45); text-align:center; padding:6px;}
+  .exp-logo img{width:100%; height:100%; object-fit:contain;}
+  .exp-info{flex:1;}
+  .exp-company{font-family:var(--font-display); font-size:1.15rem; color:var(--gold-bright);}
+  .exp-title{font-size:.95rem; color:rgba(255,255,255,.9);}
+  .exp-dates{font-family:var(--font-mono); font-size:.72rem; color:rgba(255,255,255,.55); text-transform:uppercase; letter-spacing:.06em; white-space:nowrap;}
+  #eduList .exp-row{border-bottom:1px solid var(--line-dark);}
+  #eduList .exp-company{color:var(--navy);}
+  #eduList .exp-title{color:#333;}
+  #eduList .exp-dates{color:#777;}
+  .edu-meta{display:flex; gap:16px; margin-top:6px; flex-wrap:wrap;}
+  .edu-tag{font-family:var(--font-mono); font-size:.68rem; color:#777;}
+  .edu-tag .editable{color:var(--navy); font-weight:600;}
+
+  /* ---------- RESUME / NOTE / CONTACT ---------- */
+  #resume{background:var(--white); text-align:center; border-top:1px solid var(--line-dark); border-bottom:1px solid var(--line-dark);}
+  #resume h2{margin-bottom:10px;}
+  #resumeLink{display:inline-flex; align-items:center; gap:8px; margin-top:18px;}
+
+  #note{background:var(--off);}
+  .note-card{max-width:70ch; margin:0 auto; background:var(--white); border-left:4px solid var(--gold); padding:34px 38px; border-radius:4px; font-style:normal; box-shadow:0 6px 24px rgba(11,31,58,.06);}
+  .note-sign{margin-top:18px; font-family:var(--font-display); font-size:1.3rem; color:var(--navy);}
+
+  #contact{background:var(--navy-deep); color:var(--white);}
+  #contact .section-head h2{color:var(--white);}
+  .contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:40px;}
+  .contact-field{margin-bottom:14px;}
+  .contact-field label{display:block; font-family:var(--font-mono); font-size:.68rem; text-transform:uppercase; letter-spacing:.08em; color:var(--gold-bright); margin-bottom:6px;}
+  .contact-field input, .contact-field textarea{width:100%; background:rgba(255,255,255,.06); border:1px solid var(--line); border-radius:4px; color:var(--white); padding:10px 12px; font-family:var(--font-body); font-size:.9rem;}
+  .contact-info a{display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--white); padding:10px 0; border-bottom:1px solid var(--line); font-size:.92rem;}
+  .contact-info a span.k{color:var(--gold-bright); font-family:var(--font-mono); font-size:.68rem; text-transform:uppercase; letter-spacing:.08em; width:90px; flex:0 0 auto;}
+
+  footer{background:var(--navy-deep); color:rgba(255,255,255,.5); text-align:center; padding:22px 0; font-family:var(--font-mono); font-size:.72rem; letter-spacing:.05em;}
+
+  @media (max-width:880px){
+    .hero-grid{grid-template-columns:1fr; text-align:center;}
+    .hero-photo-wrap{justify-self:center;}
+    .fund-grid{grid-template-columns:1fr;}
+    .contact-grid{grid-template-columns:1fr;}
+    #navlinks{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= NAV ================= -->
+<nav id="nav">
+  <div class="wrap">
+    <div class="brand editable" contenteditable="false" data-key="nav-brand">GABRIEL <span>DONATELLI</span></div>
+    <div id="navlinks">
+      <a href="#hero" onclick="navClick(event)"><span class="editable" contenteditable="false" data-key="nav-link-about">About</span></a>
+      <a href="#fundamentals" onclick="navClick(event)"><span class="editable" contenteditable="false" data-key="nav-link-fundamentals">Fundamentals</span></a>
+      <a href="#expertise" onclick="navClick(event)"><span class="editable" contenteditable="false" data-key="nav-link-expertise">Expertise</span></a>
+      <a href="#trips" onclick="navClick(event)"><span class="editable" contenteditable="false" data-key="nav-link-trips">Experiences</span></a>
+      <a href="#projects" onclick="navClick(event)"><span class="editable" contenteditable="false" data-key="nav-link-projects">Projects</span></a>
+      <a href="#experience" onclick="navClick(event)"><span class="editable" contenteditable="false" data-key="nav-link-experience">Career</span></a>
+      <a href="#education" onclick="navClick(event)"><span class="editable" contenteditable="false" data-key="nav-link-education">Education</span></a>
+      <a href="#contact" onclick="navClick(event)"><span class="editable" contenteditable="false" data-key="nav-link-contact">Contact</span></a>
+    </div>
+    <div class="navctrls">
+      <button class="btn small solid admin-btn" id="saveBtnNav">💾 Save My Edits</button>
+      <button class="btn small admin-btn" id="loadBtnNav">⤓ Load Saved Edits</button>
+      <input type="file" id="loadInputNav" accept="application/json" style="display:none;">
+      <button class="btn admin-btn" id="editToggle">Exit Edit Mode</button>
+    </div>
+  </div>
+</nav>
+<div id="editBar">
+  <div class="wrap">
+    <label>Font Pairing</label>
+    <select id="fontSelect">
+      <option value="stadium">Stadium Bold (Anton / Inter)</option>
+      <option value="playbook">Classic Playbook (Oswald / Source Sans)</option>
+      <option value="scoreboard">Scoreboard Mono (Bebas Neue / Inter)</option>
+    </select>
+    <span style="font-family:var(--font-mono); font-size:.65rem; color:rgba(255,255,255,.55); margin-left:auto;">Click text to edit · click any photo to upload · use +Add to create new tabs · don't forget to hit 💾 Save My Edits</span>
+  </div>
+</div>
+
+<!-- ================= HERO / ABOUT ================= -->
+<header id="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow editable" contenteditable="false" data-key="hero-eyebrow">About Me</div>
+      <h1 class="hero-name editable" contenteditable="false" data-key="hero-name">GABRIEL <em>DONATELLI</em></h1>
+      <div class="hero-role editable" contenteditable="false" data-key="hero-role">Sports Business &amp; Operations Professional</div>
+      <p class="hero-copy editable" contenteditable="false" data-key="hero-copy">I create memorable moments and lasting experiences through sports. Across collegiate athletics, championship events, and nonprofit leadership, I've built a career around fan engagement, community impact, and operational excellence — with the long-term goal of leading marketing and operations strategy for an organization that uses sports as a platform for positive change.</p>
+    </div>
+    <div class="hero-photo-wrap">
+      <div class="hero-photo imgslot" data-key="hero-photo" id="heroPhoto">
+        <img src="" alt="Gabriel Donatelli" style="display:none;">
+      </div>
+      <div class="scorebug"><small class="editable" contenteditable="false" data-key="scorebug-label">Est.</small><span class="editable" contenteditable="false" data-key="scorebug-text">Career 2019 —</span></div>
+    </div>
+  </div>
+  <div class="scoreboard">
+    <div class="wrap" id="scoreboardWrap"></div>
+    <div class="wrap" style="padding:10px 24px 18px; display:flex; justify-content:center;">
+      <button class="btn small addtab" id="addStat">+ Add Stat</button>
+    </div>
+  </div>
+</header>
+
+<!-- ================= FUNDAMENTALS ================= -->
+<section id="fundamentals">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow editable" contenteditable="false" data-key="fund-eyebrow">The Playbook</div>
+      <h2 class="editable" contenteditable="false" data-key="fund-h2">The Fundamentals</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="fund-grid" id="fundGrid"></div>
+  </div>
+</section>
+
+<!-- ================= EXPERTISE ================= -->
+<section id="expertise" class="tabsection" style="background:var(--white); border-top:1px solid var(--line-dark);">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow editable" contenteditable="false" data-key="expertise-eyebrow">All-Access Pass</div>
+      <h2 class="editable" contenteditable="false" data-key="expertise-h2">Areas of Expertise</h2>
+      <div class="divider"></div>
+      <p class="editable" contenteditable="false" data-key="expertise-desc" style="margin-top:14px; max-width:60ch; color:#444;">Tap a credential to open the full file — background, projects, and photos from that area of work.</p>
+    </div>
+    <div class="tabrow" id="expertiseTabs"></div>
+    <button class="btn addtab" id="addExpertise">+ Add Credential</button>
+  </div>
+</section>
+
+<!-- ================= TRIPS ================= -->
+<section id="trips" class="tabsection">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow editable" contenteditable="false" data-key="trips-eyebrow">The Road Trip</div>
+      <h2 class="editable" contenteditable="false" data-key="trips-h2">Trips &amp; Other Experiences</h2>
+      <div class="divider"></div>
+      <p class="editable" contenteditable="false" data-key="trips-desc" style="margin-top:14px; max-width:60ch; color:#444;">Punch a ticket to relive the trip — championships hosted, industry summits, and career-defining moments on the road.</p>
+    </div>
+    <div class="tabrow" id="tripsTabs"></div>
+    <button class="btn addtab" id="addTrip">+ Add Ticket</button>
+  </div>
+</section>
+
+<!-- ================= PROJECTS ================= -->
+<section id="projects" class="tabsection" style="background:var(--white); border-top:1px solid var(--line-dark);">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow editable" contenteditable="false" data-key="projects-eyebrow">The Case File</div>
+      <h2 class="editable" contenteditable="false" data-key="projects-h2">Projects</h2>
+      <div class="divider"></div>
+      <p class="editable" contenteditable="false" data-key="projects-desc" style="margin-top:14px; max-width:60ch; color:#444;">Papers, presentations, and models from coursework and professional projects. Open a folder to view or upload the file.</p>
+    </div>
+    <div class="tabrow" id="projectsTabs"></div>
+    <button class="btn addtab" id="addProject">+ Add Project</button>
+  </div>
+</section>
+
+<!-- ================= EXPERIENCE ================= -->
+<section id="experience">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow editable" contenteditable="false" data-key="exp-eyebrow">The Roster</div>
+      <h2 class="editable" contenteditable="false" data-key="exp-h2">Experience</h2>
+      <div class="divider"></div>
+    </div>
+    <div id="expList"></div>
+  </div>
+</section>
+
+<!-- ================= RESUME ================= -->
+<section id="resume">
+  <div class="wrap">
+    <div class="eyebrow editable" contenteditable="false" data-key="resume-eyebrow">Full Scouting Report</div>
+    <h2 class="editable" contenteditable="false" data-key="resume-h2">Download My Resume</h2>
+    <p class="editable" contenteditable="false" data-key="resume-desc" style="max-width:50ch; margin:14px auto 0; color:#444;">Click below for a full breakdown of my experience, education, and skills.</p>
+    <a class="btn solid" id="resumeLink" href="#" download="Gabriel_Donatelli_Resume.pdf">⬇ Download Resume</a>
+    <input type="file" id="resumeInput" accept="application/pdf" style="display:none;">
+  </div>
+</section>
+
+<!-- ================= EDUCATION ================= -->
+<section id="education" style="background:var(--white); border-top:1px solid var(--line-dark);">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow editable" contenteditable="false" data-key="education-eyebrow">Academic Record</div>
+      <h2 class="editable" contenteditable="false" data-key="education-h2">Education</h2>
+      <div class="divider"></div>
+    </div>
+    <div id="eduList"></div>
+    <button class="btn addtab" id="addEducation" style="margin-top:18px;">+ Add Education</button>
+  </div>
+</section>
+
+<!-- ================= NOTE ================= -->
+<section id="note">
+  <div class="wrap">
+    <div class="section-head" style="text-align:center; margin:0 auto 30px;">
+      <div class="eyebrow editable" contenteditable="false" data-key="note-eyebrow" style="text-align:center;">From the Field</div>
+      <h2 class="editable" contenteditable="false" data-key="note-h2">A Personal Note</h2>
+      <div class="divider" style="margin:14px auto 0;"></div>
+    </div>
+    <div class="note-card editable" contenteditable="false" data-key="note-body">
+      <p>Thank you for taking the time to explore my portfolio and learn more about my experiences, projects, and passion for the sports industry. Each opportunity throughout my career has helped me grow as a professional while reinforcing my belief in the power of sports to create meaningful experiences and positive impact.</p>
+      <p>I appreciate your interest in my work and would welcome the opportunity to discuss how my skills, experiences, and passion can contribute to your organization's goals. I am excited about the possibility of bringing my background in operations, marketing, community engagement, partnerships, and event management to a team that values creating memorable experiences and making a difference through sports.</p>
+      <p>Thank you again for your time and consideration. I look forward to the opportunity to connect and learn how I can contribute to your organization.</p>
+      <div class="note-sign">— Gabriel Donatelli</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section id="contact">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow editable" contenteditable="false" data-key="contact-eyebrow">Get In The Game</div>
+      <h2 class="editable" contenteditable="false" data-key="contact-h2">Contact Me</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="contact-grid">
+      <form id="contactForm" onsubmit="return sendContact(event)">
+        <div class="contact-field"><label>Name</label><input type="text" required name="name"></div>
+        <div class="contact-field"><label>Email</label><input type="email" required name="email"></div>
+        <div class="contact-field"><label>Message</label><textarea rows="5" required name="message"></textarea></div>
+        <button class="btn solid" type="submit">Send Message</button>
+      </form>
+      <div class="contact-info">
+        <a href="mailto:youremail@example.com" class="editable-link" data-key="contact-email" data-hreftype="mailto"><span class="k">Email</span> <span class="editable" contenteditable="false" data-key="contact-email-text">youremail@example.com</span></a>
+        <a href="tel:0000000000" class="editable-link" data-key="contact-phone" data-hreftype="tel"><span class="k">Phone</span> <span class="editable" contenteditable="false" data-key="contact-phone-text">(000) 000-0000</span></a>
+        <a href="https://linkedin.com" target="_blank" class="editable-link" data-key="contact-linkedin"><span class="k">LinkedIn</span> <span class="editable" contenteditable="false" data-key="contact-linkedin-text">linkedin.com/in/gabrieldonatelli</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>© <span id="year"></span> <span class="editable" contenteditable="false" data-key="footer-text">Gabriel Donatelli. Built for the game.</span></footer>
+
+<!-- ================= MODAL ================= -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ============================================================
+   DATA
+============================================================ */
+const fundamentals = [
+{id:'f1', title:'Mission &amp; Goals', body:`My mission is to create memorable moments and lasting experiences through sports while making a positive impact on the communities organizations serve. I believe sports have the unique ability to bring people together, create lifelong memories, and provide opportunities for individuals to connect, grow, and be inspired.
+
+Throughout my career, I have focused on creating experiences that extend beyond the event itself. Whether developing fan engagement opportunities, organizing community programs, supporting student athletes, building partnerships, or creating meaningful events, my goal is to help organizations create connections that leave a lasting impression on fans, participants, and communities.
+
+My short term goal is to continue developing as a sports business professional by gaining experience in fan engagement, marketing, development, partnerships, and event operations. I want to contribute to an organization where I can combine my background in business operations with my passion for creating meaningful experiences, strengthening relationships, and helping organizations achieve their goals.
+
+My long term goal is to become a leader within the sports industry, eventually serving in a senior leadership role such as Director of Marketing, Director of Operations, or a similar position where I can develop strategy, lead teams, and create impactful experiences for fans and communities. I hope to oversee initiatives that grow an organization's brand, improve operational excellence, and use sports as a platform for positive change. Ultimately, I want to help build organizations that create unforgettable memories while leaving a lasting impact on the people and communities they serve.`},
+{id:'f2', title:'Communication &amp; Relationship-Building', body:`Strong communication and relationships are the foundation of successful organizations. Throughout my experiences in collegiate athletics, nonprofit development, and community engagement, I have developed the ability to communicate with a variety of stakeholders, including coaches, administrators, donors, student athletes, corporate partners, community leaders, and fans.
+
+At Preserve Shady Rest, I have built relationships with donors, businesses, nonprofit organizations, and community members to support fundraising efforts, community programming, and historical preservation initiatives. At Northwestern Athletics, I regularly collaborate with coaches, staff members, campus departments, and external partners to support financial operations, events, and department initiatives.
+
+I believe effective communication requires active listening, understanding different perspectives, and creating trust. Whether working with a donor, colleague, vendor, or community member, I focus on building relationships that create long term value.`},
+{id:'f3', title:'Leadership Skills', body:`My leadership approach is centered around setting the example, taking initiative, and creating an environment where others feel supported and empowered to succeed. I believe leadership is demonstrated through actions, consistency, accountability, and the ability to communicate effectively with those around you.
+
+Throughout my experiences in collegiate athletics and nonprofit development, I have developed leadership skills by taking ownership of projects, creating solutions, and supporting teams in fast paced environments. At Preserve Shady Rest, I have helped lead organizational initiatives including fundraising efforts, community programming, youth development opportunities, and the creation of an internship program designed to provide students with hands on experience in sports, nonprofit management, marketing, and development.
+
+As a leader of the internship program, I focus on creating a structured and supportive environment where interns understand their responsibilities, receive clear expectations, and have opportunities to grow professionally. I communicate regularly with interns through meetings, project updates, and feedback conversations to ensure everyone understands priorities and feels connected to the organization's mission.
+
+I believe effective leaders do not simply delegate tasks, but actively participate, provide guidance, and demonstrate the standards they expect from others. Whether assisting with events, managing projects, or supporting organizational goals, I strive to set the example by being dependable, prepared, and willing to contribute wherever needed.
+
+My leadership experiences have taught me the importance of communication, trust, and empowering others. By creating strong relationships and providing individuals with the tools they need to succeed, I aim to help teams achieve shared goals while developing the next generation of leaders.`},
+{id:'f4', title:'Time Management Skills', body:`Working in athletics has taught me the importance of organization, prioritization, and adaptability. In my role at Northwestern Athletics, I work in a fast paced environment supporting 21 varsity sports where priorities can change quickly due to travel needs, financial deadlines, event schedules, and unexpected challenges.
+
+To manage multiple responsibilities effectively, I use a combination of digital tools and personal organization systems, including:
+• Maintaining a master calendar to track athletic events, deadlines, meetings, and important department timelines
+• Using color coded calendars to separate priorities such as travel, finance deadlines, projects, and meetings
+• Creating detailed to-do lists to organize daily responsibilities and track progress on larger projects
+• Using Post-it Notes to visually organize immediate priorities, reminders, and short term tasks
+• Flagging and pinning important emails to keep urgent items visible and prevent missed deadlines
+• Setting phone reminders and calendar alerts for meetings, follow-ups, and time sensitive responsibilities
+• Creating personal deadlines ahead of official due dates to allow time for review and adjustments
+
+Managing multiple projects requires more than completing tasks. It requires anticipating challenges, communicating proactively, and staying organized when priorities shift. These systems have allowed me to balance daily operational responsibilities while continuing to contribute to larger strategic projects.`},
+];
+
+const expertise = [
+{id:'sports-marketing', label:'Sports Marketing', body:`My experience in sports marketing spans collegiate athletics, championship events, nonprofit organizations, and corporate partnerships, allowing me to develop campaigns that strengthen brands, engage fans, and build meaningful relationships with communities. Throughout my career, I have combined event promotion, sponsor activations, branding, digital marketing, licensing, and creative design to help organizations achieve their marketing objectives while delivering memorable experiences.
+
+Promotions, Activations, and Fan Engagement
+Creating memorable fan experiences has been one of the most rewarding aspects of my career. At Seton Hall Athletics, I helped execute a variety of game day promotions designed to increase attendance, strengthen school spirit, and enhance the overall fan experience — including the Shaheen Holloway bobblehead giveaway, Lights Off media timeout activations, Dig Pink, Halloween at the Hall, and numerous additional themed nights throughout the year.
+
+I also supported corporate sponsor activations with Learfield at Penn State, connecting national partners with fans while fulfilling sponsorship agreements, and helped execute interactive fan experiences with the United States Soccer Federation, including kicking challenges, photo booths, and "First Cap" giveaway programs.
+
+Branding, Licensing, and Merchandise
+At Preserve Shady Rest, I helped establish the organization's visual identity — selecting brand fonts, developing a cohesive color palette, and overseeing trademark registration of the Shady Rest logo — while designing branded apparel and marketing collateral. At Seton Hall, I worked with collegiate licensing across promotional materials, and at the USGA I created marketing materials aligned with the organization's visual identity guidelines.
+
+Social Media and Digital Marketing
+I have created digital campaigns that promote events and strengthen organizational storytelling — from social graphics and fundraising campaigns at Preserve Shady Rest, to game day and mascot content at Seton Hall, to ticket operations and fan communication graphics at the USGA.`},
+{id:'community-relations', label:'Community Relations', body:`Building meaningful relationships with communities has been one of the most rewarding aspects of my career. Through collegiate athletics and nonprofit leadership, I have developed programs and events that connect organizations with the people they serve while creating lasting social impact.
+
+Community Service and Volunteerism
+At Northwestern Athletics, I participated in the Cats Community Classic — farming and harvesting produce for local food programs, packaging supplies for families in need, and restoring a local bird sanctuary alongside student-athletes, coaches, and staff.
+
+Community Engagement Through Sports
+I helped plan a FIFA World Cup watch party bringing together Northwestern Soccer and the Chicago Stars FC, introducing new audiences to both organizations through interactive activities and networking.
+
+Preserve Shady Rest Community Programming
+As Director of External Affairs and Development for Preserve Shady Rest, I have planned dozens of community events celebrating history and strengthening neighborhood connections — Jazz Nights, Fourth of July celebrations, Juneteenth commemorations, community dinners, and programming for older adults including Dueling Pianos and Senior Tea Parties.
+
+Youth Development and Education
+I helped create the John Shippen Swing School, a six-week youth golf clinic honoring John Shippen Jr., the first American-born golf professional — led by three Division I men's golfers who serve as coaches and mentors, combining instruction with mentorship and historical education for underserved children.`},
+{id:'event-management', label:'Event Management', body:`My experience in event management spans collegiate athletics, championship events, professional sports, and large scale entertainment experiences — event operations, facility logistics, crowd management, venue preparation, and cross-functional coordination.
+
+Penn State Athletics Event Operations
+As a Stadium Operations Assistant at Beaver Stadium, I supported game day preparation and facility operations for one of the largest venues in college athletics, contributed to gate layout planning, helped implement bird deterrent laser systems, and supported the Beaver Stadium Revitalization Project.
+
+Fan Experience, Activations, and Large Scale Events
+I helped design layouts for the Penn State Block Party and supported the planning and execution of the Luke Combs Concert at Beaver Stadium — transforming a football stadium into a concert venue.
+
+Northwestern Athletics and Championship Event Operations
+I served as a Team Host for the NCAA Men's Basketball Tournament Sweet Sixteen and Elite Eight at the United Center (Michigan, Iowa State, Tennessee, Alabama) and for the NCAA Women's Lacrosse Final Four at Northwestern (North Carolina, Johns Hopkins, Maryland, Northwestern). I've also supported Chicago Stars FC and Premier Lacrosse League events at Northwestern Medicine Field, and contributed to planning for the new Ryan Field Stadium Project.`},
+{id:'fundraising', label:'Fundraising', body:`My experience in fundraising and development has focused on building relationships, identifying new opportunities, and creating sustainable revenue streams for nonprofit and athletic organizations.
+
+Donor Prospecting and Relationship Building
+At Preserve Shady Rest, I led fundraising through cold calling, tailored marketing emails, and community engagement — developing prospect lists and connecting with donors, businesses, and community leaders. This work helped generate more than $200,000 in fundraising support while building long-term partnerships.
+
+Fundraising Strategy and Revenue Generation
+I developed and implemented multiple strategies including grant writing, merchandise sales, raffles, and sponsorship opportunities, using CRM platforms to track outreach and stewardship.
+
+Event Based Fundraising
+I helped organize fundraising events including Jazz Nights and community dinners at Preserve Shady Rest, managing sponsorships, logistics, and donor engagement.
+
+Collegiate Athletics Development
+At Seton Hall Athletics, I gained experience with the Pirate Blue Fund — assisting with the Athletics Hall of Fame Dinner, donor events, and golf outings, conducting donor outreach, and shadowing donor calls to learn stewardship best practices.`},
+{id:'corporate-partnerships', label:'Corporate Partnerships', body:`My experience in corporate partnerships has focused on building relationships between brands and sports organizations through sponsorship activation, partner servicing, and revenue generation.
+
+Sponsorship Activations and Partner Experiences
+At Learfield, I supported sponsor activations for Penn State Athletics — including the PA Lottery 30 Second Shooting Challenge, the Kickoff Kid experience, and the Utz on-field race — and participated in relationship-building conversations with brands including Pepsi, MI Windows and Doors, and Choice Hotels.
+
+Corporate Hospitality and Premium Experiences
+I helped coordinate the Corporate Hospitality Village at Penn State, preparing partner suites and supporting activation areas like photo booths and on-field tours.
+
+Revenue Generation and Partnership Sales
+At Penn State Harrisburg Athletics, I conducted sales outreach that helped secure partnerships with companies including Giant Food Stores and Fulton Bank.
+
+National Event Partnerships
+With the United States Soccer Federation, I supported sponsor activations and fan engagement at national soccer events, including kicking challenges and "First Cap" giveaway programs.`},
+{id:'budget-finance', label:'Budget Management &amp; Finance', body:`My experience in budget management and finance has centered around supporting the operational and strategic needs of a Division I athletic department at Northwestern Athletics.
+
+Athletic Department Financial Operations
+As Assistant Director of Business Operations, I manage financial operations for all 21 sport programs — reviewing and reconciling invoices, purchase orders, cash advances, reimbursements, and travel expenses for more than 75 coaches and over 300 full-time staff members.
+
+Strategic Financial Planning and Analysis
+I've supported financial planning for the $850 million Ryan Field Stadium Project and the temporary Lakeside Stadium, and developed a financial model evaluating a potential transition with Levy from traditional meal guarantees to a meal-swipe based system.
+
+Contracts, Vendors, and Compliance
+I manage athletic agreements including game contracts and vendor agreements, collaborating with Learfield, JMI Sports, Legends Global, Levy, Coca-Cola, and Under Armour while maintaining compliance with university, Big Ten, NCAA, and College Sports Commission regulations.`},
+{id:'travel-logistics', label:'Travel &amp; Logistical Management', body:`My experience in travel and logistical management has focused on coordinating complex team operations, managing financial resources, and creating efficient systems that support coaches, staff, and student-athletes at Northwestern Athletics.
+
+Team Travel Planning and Coordination
+I coordinate transportation, lodging, meals, and financial processes for all 21 sport programs, working directly with Anthony Travel on hotel agreements, accommodations, and flights.
+
+Travel Finance and Expense Management
+I manage travel-related expense review and reconciliation, and have helped develop systems for distributing meal money through reloadable debit cards while maintaining financial controls.
+
+Travel Policies and Process Development
+I've contributed to travel request forms, approval workflows, mileage maps, and standardized meal amounts that improve consistency across sport programs, all while maintaining NCAA, Big Ten, and university compliance.`},
+{id:'nil-revenue', label:'NIL &amp; Revenue Sharing', body:`My experience in NIL and revenue sharing has focused on understanding the evolving financial model of collegiate athletics.
+
+NIL Partnerships and Athlete Opportunities
+At Penn State Harrisburg Athletics, I supported NIL initiatives by helping identify partnership opportunities between student-athletes and local businesses.
+
+Revenue Sharing Operations
+At Northwestern Athletics, I've supported the implementation of revenue sharing initiatives and the operational processes surrounding student-athlete payments.
+
+NIL Research and Strategic Planning
+My interest in this space led to my Northwestern MSSA capstone project — a strategic business model integrating NIL, multimedia rights, ticketing, and corporate partnerships into a centralized revenue strategy for Division I athletics.`},
+{id:'masters', label:"Master's Program", body:`Master of Science in Sports Administration | Northwestern University
+
+My MSSA program provided a comprehensive understanding of the business, operations, leadership, and strategic challenges facing the modern sports industry.
+
+Sports Business and Analytics
+Courses including Introduction to Sports Analytics and Sports Business strengthened my ability to analyze trends, evaluate business opportunities, and use data to support decision-making.
+
+Athletic Administration and Organizational Management
+College Management: External/Internal Affairs and Sports Organizations: Leadership provided insight into fundraising, donor relations, marketing, and organizational structure.
+
+Compliance, Legal, and Ethical Issues
+NCAA Compliance and Legal and Ethical Issues in Sports covered NCAA legislation, athlete eligibility, and Title IX considerations.
+
+Capstone Project
+My capstone developed a strategic business model for Baseline Asset Management Services (BAMS) — a proposed multimedia rights and revenue strategy company designed to help athletic departments maximize opportunities across partnerships, ticketing, NIL, and emerging revenue streams.`},
+{id:'ai', label:'AI', body:`I have leveraged artificial intelligence to improve operational efficiency, streamline administrative processes, and develop practical tools that enhance collaboration and decision-making.
+
+Business Process Automation
+At Northwestern Athletics, I designed an AI-powered invoice processing system that automates approval routing, signature collection, budget chartstring assignment, and document filing — reducing average invoice processing time from about seven minutes to two minutes.
+
+Knowledge Management and Internal Resources
+I created an internal informational website for Northwestern Athletics Business Operations, centralizing policies, procedures, and frequently used forms.
+
+AI Collaboration and CRM Development
+At Preserve Shady Rest, I developed an AI-powered dashboard for communication, project management, and collaboration among interns and staff — the foundation of a developing CRM system tracking projects, fundraising, and organizational initiatives.`},
+{id:'dei', label:'DEI', body:`My experience in diversity, equity, inclusion, and justice has focused on creating opportunities and using sports and community engagement as a platform for positive change.
+
+Community Impact and Historical Preservation
+Through Preserve Shady Rest, I've helped develop programs, events, and educational initiatives celebrating America's first Black-owned country club, including Juneteenth programming, educational field trips, and the John Shippen Swing School.
+
+Justice, Equity, Diversity, and Inclusion Leadership
+At Northwestern Athletics and Recreation, I served as an Assessment Committee Member for the JEDI initiative, reviewing the City of Chicago's Racial Equity Impact Assessment (REIA) framework to help identify barriers and improve organizational outcomes.
+
+Organizational Change and Inclusive Practices
+I contributed to discussions on the Kabiller Awards selection process, helping evaluate how recognition programs could promote fairness, transparency, and representation.`},
+];
+
+const trips = [
+{id:'march-madness', label:'March Madness: Sweet Sixteen &amp; Elite Eight Host', date:'April 2026', body:`I served as a Team Host for the NCAA Men's Basketball Tournament Sweet Sixteen and Elite Eight at the United Center in Chicago, working directly with Michigan, Iowa State, Tennessee, and Alabama throughout championship week. I served as a primary liaison between the participating teams, NCAA officials, Northwestern Athletics, and venue staff, coordinating team logistics, managing practice and game schedules, and facilitating communication across stakeholders in a fast-paced championship environment.`},
+{id:'lacrosse-final-four', label:"NCAA Women's Lacrosse Final Four Host", date:'May 2026', body:`I served as a Team Host for the NCAA Women's Lacrosse Final Four at Northwestern University, working directly with North Carolina, Johns Hopkins, Maryland, and Northwestern. I acted as a primary liaison between participating teams, NCAA officials, and event staff, coordinating team logistics and game day operations throughout the tournament.`},
+{id:'nacda', label:'NACDA Trip', date:'', body:`Details coming soon — click edit mode to add the story from this trip.`},
+{id:'chicago-summit', label:'Chicago Sports Summit', date:'October 2024', body:`I attended the Chicago Sports Summit to learn from leaders across the sports industry. Sessions featuring Laura Ricketts, owner of the Chicago Red Stars, and Joie Chitwood III, Executive Director of the Presidents Cup, explored leadership, fan engagement, community impact, and the future of the industry — while offering valuable networking with industry professionals.`},
+{id:'nets-combine', label:'Brooklyn Nets Sales Combine', date:'November 2023', body:`I participated in the BSE Global Inside Sales Combine at the Barclays Center, gaining hands-on experience with sales training, role-playing exercises, and networking sessions covering ticket sales, prospecting, and relationship building with the Brooklyn Nets and BSE Global.`},
+{id:'truist', label:'Truist Leadership Certification', date:'', body:`Details coming soon — click edit mode to add the story from this certification.`},
+{id:'nil-cert', label:'CleanKonnect NIL Certification', date:'December 2023', body:`I completed a certification in Name, Image, and Likeness (NIL), building a foundation in athlete branding, sponsorships, licensing, and compliance. I applied this knowledge supporting Onward Setonia, Seton Hall Athletics' NIL initiative, and it later informed my master's capstone project on a centralized revenue strategy for Division I athletics.`},
+{id:'psu-speaker', label:'Penn State Sports Business Club Speaker', date:'October 2024', body:`I returned to the Penn State Sports Business Club as a guest speaker, sharing my career journey across Penn State, Seton Hall, Northwestern, and Preserve Shady Rest, and discussing how internships, networking, and embracing diverse opportunities shaped my career in sports business.`},
+{id:'dc-trip', label:'Washington DC Trip', date:'February 2022', body:`I participated in the Penn State Sports Business Club's industry trip to Washington, D.C., meeting with Enes Alan of the Washington Spirit and attending a Washington Wizards game to observe game presentation, premium hospitality, and the professional fan experience.`},
+{id:'devils-trip', label:'New Jersey Devils Trip', date:'November 2023', body:`I participated in the Penn State Sports Business Club's fall industry trip to the Prudential Center, meeting with Penn State alum Gabrielle Klein to learn about group sales, relationship management, and revenue generation with the New Jersey Devils.`},
+];
+
+const projectsSeed = Array.from({length:12}, (_,i)=>({
+  id:'project-'+(i+1),
+  label:'Project '+(i+1),
+  date:'',
+  body:`Add a title and short description for this project or paper. Use Edit Mode to rename this tab and write the summary here.`,
+  fileName:'', fileUrl:'', link:''
+}));
+
+const experience = [
+{company:'Preserve Shady Rest', title:'Director of External Affairs &amp; Development', dates:'June 2020 – Present'},
+{company:'Northwestern Athletics &amp; Recreation', title:'Assistant Director of Business Operations', dates:'Jan 2024 – Present'},
+{company:'Learfield – Penn State Sports Properties', title:'Gameday Properties Assistant', dates:'Aug 2023 – Dec 2023'},
+{company:'Penn State Athletics', title:'Operations &amp; Facilities Assistant, Beaver Stadium', dates:'Sep 2022 – Dec 2023'},
+{company:'United States Golf Association', title:'Ticketing Customer Service &amp; Guest Experience Intern', dates:'Apr 2023 – Jul 2023'},
+{company:'Seton Hall Athletics', title:'Marketing &amp; Development', dates:'May 2022 – Aug 2022'},
+{company:'Penn State Harrisburg', title:'Sports Information', dates:'Jan 2021 – May 2022'},
+{company:'Somerset Patriots', title:'Concessions Supervisor', dates:'Apr 2019 – Aug 2021'},
+];
+
+let stats = [
+{id:'stat-1', num:'21', label:'Varsity Sports Supported'},
+{id:'stat-2', num:'$200K+', label:'Fundraising Generated'},
+{id:'stat-3', num:'4', label:'NCAA Championship Events Hosted'},
+{id:'stat-4', num:'8', label:'Organizations Served'},
+];
+
+let education = [
+{id:'edu-1', school:'Northwestern University', degree:'M.S. in Sports Administration', major:'Sports Administration', gradYear:'2026', dates:'2024 – 2026'},
+{id:'edu-2', school:'Add your undergraduate institution', degree:'Add your degree', major:'Add your major', gradYear:'Add graduation year', dates:'Add dates'},
+];
+
+let projects = JSON.parse(JSON.stringify(projectsSeed));
+function normalizePhotos(it){
+  if(!it.photos){ it.photos = [{src:'',size:'sm'},{src:'',size:'sm'},{src:'',size:'sm'},{src:'',size:'sm'}]; return; }
+  it.photos = it.photos.map(p => {
+    if(typeof p === 'string') return {src:p, size:'sm'};
+    const out = {src:p.src||'', size:p.size||'sm'};
+    if(p.width) out.width = p.width;
+    if(p.height) out.height = p.height;
+    return out;
+  });
+}
+[...expertise, ...trips, ...projects].forEach(normalizePhotos);
+[...expertise, ...trips].forEach(it=>normalizeLinks(it,'linkedProjects'));
+expertise.forEach(it=>normalizeLinks(it,'linkedTrips'));
+projects.forEach(p=>{ if(p.date===undefined) p.date = ''; });
+
+/* ============================================================
+   RENDER HELPERS
+============================================================ */
+function pad(n){return n<10?'0'+n:''+n;}
+
+function renderFundamentals(){
+  const grid = document.getElementById('fundGrid');
+  grid.innerHTML = fundamentals.map(f=>`
+    <div class="fund-card">
+      <h3 class="editable" contenteditable="false" data-key="fundtitle-${f.id}">${f.title}</h3>
+      <div class="fund-body" id="body-${f.id}"><div class="editable" contenteditable="false" data-key="fundbody-${f.id}">${f.bodyHtml || f.body.split('\n\n').map(p=>`<p>${p.replace(/\n/g,'<br>')}</p>`).join('')}</div></div>
+      <button class="fund-toggle" onclick="toggleFund('${f.id}', this)">Read more ▾</button>
+    </div>
+  `).join('');
+  fundamentals.forEach(f=>{
+    const titleEl = grid.querySelector(`[data-key="fundtitle-${f.id}"]`);
+    if(titleEl) titleEl.addEventListener('input', ()=>{ f.title = titleEl.innerHTML; });
+    const bodyEl = grid.querySelector(`[data-key="fundbody-${f.id}"]`);
+    if(bodyEl) bodyEl.addEventListener('input', ()=>{ f.bodyHtml = bodyEl.innerHTML; });
+  });
+}
+function toggleFund(id, btn){
+  const el = document.getElementById('body-'+id);
+  el.classList.toggle('open');
+  btn.textContent = el.classList.contains('open') ? 'Read less ▴' : 'Read more ▾';
+}
+
+const SIZE_PX = {sm:140, md:240, lg:380};
+function galleryHTML(containerId, item){
+  const photos = item.photos || [];
+  let html = `<div class="gallery" id="gallery-${item.id}">`;
+  photos.forEach((photo,i)=>{
+    const base = SIZE_PX[photo.size||'sm'];
+    const w = photo.width || base;
+    const h = photo.height || base;
+    const src = photo.src || '';
+    html += `<div class="photo-item" style="width:${w}px;"
+        ondragover="onPhotoDragOver(event)"
+        ondrop="onPhotoDrop(event,'${containerId}','${item.id}',${i})">
+      <div class="photo-draghandle" draggable="true"
+        ondragstart="onPhotoDragStart(event,'${containerId}','${item.id}',${i})"
+        ondragend="onPhotoDragEnd(event)"
+        title="Drag to reposition">⠿ Drag</div>
+      <div class="imgslot" data-container="${containerId}" data-itemid="${item.id}" data-idx="${i}" style="width:${w}px; height:${h}px;">
+        <img src="${src}" style="${src?'':'display:none;'}">
+        ${src?'':'<span class="phlabel">Photo</span>'}
+        <div class="resize-handle" data-container="${containerId}" data-itemid="${item.id}" data-idx="${i}" title="Drag to resize"></div>
+      </div>
+      <div class="photo-controls">
+        <button type="button" class="size-btn remove-btn" onclick="deletePhoto('${containerId}','${item.id}',${i})">✕ Remove</button>
+      </div>
+    </div>`;
+  });
+  html += `</div><div style="text-align:center; margin-top:14px;"><button class="btn small addtab" onclick="addPhoto('${containerId}','${item.id}')">+ Add Photo Spot</button></div>
+  <div class="gallery-hint">Drag the ⠿ handle to reposition a photo · drag the gold square on its corner to resize it</div>`;
+  return html;
+}
+let dragFromIdx = null;
+function onPhotoDragStart(e, containerId, itemId, idx){
+  if(!document.body.classList.contains('editing')){ e.preventDefault(); return; }
+  dragFromIdx = idx;
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', String(idx));
+  const wrap = e.target.closest('.photo-item');
+  if(wrap) wrap.classList.add('dragging');
+}
+function onPhotoDragEnd(e){
+  const wrap = e.target.closest('.photo-item');
+  if(wrap) wrap.classList.remove('dragging');
+}
+function onPhotoDragOver(e){
+  if(document.body.classList.contains('editing')) e.preventDefault();
+}
+function onPhotoDrop(e, containerId, itemId, idx){
+  if(!document.body.classList.contains('editing')) return;
+  e.preventDefault();
+  if(dragFromIdx===null || dragFromIdx===idx) return;
+  const arr = getDataArr(containerId);
+  const item = arr.find(x=>x.id===itemId);
+  const [moved] = item.photos.splice(dragFromIdx,1);
+  item.photos.splice(idx,0,moved);
+  dragFromIdx = null;
+  markDirty();
+  openModal(containerId, itemId);
+}
+function attachResizeHandles(scope){
+  scope.querySelectorAll('.resize-handle').forEach(handle=>{
+    if(handle._wired) return;
+    handle._wired = true;
+    handle.addEventListener('click', (e)=>{ e.stopPropagation(); e.preventDefault(); });
+    handle.addEventListener('mousedown', (e)=>{
+      e.preventDefault(); e.stopPropagation();
+      if(!document.body.classList.contains('editing')) return;
+      const containerId = handle.dataset.container, itemId = handle.dataset.itemid, idx = parseInt(handle.dataset.idx,10);
+      const slot = handle.parentElement;
+      const wrap = slot.closest('.photo-item');
+      const startW = slot.offsetWidth, startH = slot.offsetHeight;
+      const startX = e.clientX, startY = e.clientY;
+      function onMouseMove(ev){
+        const newW = Math.max(80, startW + (ev.clientX - startX));
+        const newH = Math.max(80, startH + (ev.clientY - startY));
+        slot.style.width = newW+'px';
+        slot.style.height = newH+'px';
+        if(wrap) wrap.style.width = newW+'px';
+      }
+      function onMouseUp(){
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+        const arr = getDataArr(containerId);
+        const item = arr.find(x=>x.id===itemId);
+        if(item && item.photos[idx]){
+          item.photos[idx].width = slot.offsetWidth;
+          item.photos[idx].height = slot.offsetHeight;
+          markDirty();
+        }
+      }
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    });
+    handle.addEventListener('touchstart', (e)=>{
+      e.stopPropagation();
+      if(!document.body.classList.contains('editing')) return;
+      const touch = e.touches[0];
+      const containerId = handle.dataset.container, itemId = handle.dataset.itemid, idx = parseInt(handle.dataset.idx,10);
+      const slot = handle.parentElement;
+      const wrap = slot.closest('.photo-item');
+      const startW = slot.offsetWidth, startH = slot.offsetHeight;
+      const startX = touch.clientX, startY = touch.clientY;
+      function onTouchMove(ev){
+        const t = ev.touches[0];
+        const newW = Math.max(80, startW + (t.clientX - startX));
+        const newH = Math.max(80, startH + (t.clientY - startY));
+        slot.style.width = newW+'px';
+        slot.style.height = newH+'px';
+        if(wrap) wrap.style.width = newW+'px';
+        ev.preventDefault();
+      }
+      function onTouchEnd(){
+        document.removeEventListener('touchmove', onTouchMove);
+        document.removeEventListener('touchend', onTouchEnd);
+        const arr = getDataArr(containerId);
+        const item = arr.find(x=>x.id===itemId);
+        if(item && item.photos[idx]){
+          item.photos[idx].width = slot.offsetWidth;
+          item.photos[idx].height = slot.offsetHeight;
+          markDirty();
+        }
+      }
+      document.addEventListener('touchmove', onTouchMove, {passive:false});
+      document.addEventListener('touchend', onTouchEnd);
+    });
+  });
+}
+const LINK_TARGETS = {
+  project: {getArr:()=>projects, containerId:'projectsTabs', field:'linkedProjects', heading:'Related Projects', icon:'📁', newLabel:'+ New Project', cardClass:'folder'},
+  trip:    {getArr:()=>trips,    containerId:'tripsTabs',    field:'linkedTrips',    heading:'Related Trips &amp; Experiences', icon:'🎟️', newLabel:'+ New Trip', cardClass:'ticket'}
+};
+function normalizeLinks(it, field){
+  if(!it[field]){ it[field] = []; return; }
+  it[field] = it[field].map(l => (typeof l === 'string') ? {id:l, thumb:''} : {id:l.id, thumb:l.thumb||''});
+}
+function linkedItemsHTML(containerId, item, kind){
+  const cfg = LINK_TARGETS[kind];
+  const hideFlag = 'hide_'+cfg.field;
+  if(item[hideFlag]){
+    return `<button type="button" class="btn small restore-section-btn show" onclick="restoreLinkedSection('${containerId}','${item.id}','${kind}')">+ Restore ${cfg.heading} Section</button>`;
+  }
+  const list = cfg.getArr();
+  const linked = item[cfg.field] || [];
+  const cards = linked.map(link=>{
+    const t = list.find(x=>x.id===link.id);
+    if(!t) return '';
+    return `<div class="tabcard linkcard ${cfg.cardClass}">
+      <span class="tabdelete" onclick="event.stopPropagation(); unlinkItem('${containerId}','${item.id}','${link.id}','${kind}')">×</span>
+      <div class="linkcard-icon">${cfg.icon}</div>
+      <div class="tlabel" onclick="openModal('${cfg.containerId}','${link.id}')">${t.label}</div>
+      <div class="tab-viewcue" onclick="openModal('${cfg.containerId}','${link.id}')">View →</div>
+    </div>`;
+  }).join('');
+  const options = list.filter(x=>!linked.some(l=>l.id===x.id)).map(x=>`<option value="${x.id}">${x.label}</option>`).join('');
+  return `
+    <div class="linked-projects">
+      <div class="linked-projects-head">
+        <div class="eyebrow">${cfg.heading}</div>
+        <button type="button" class="remove-section-btn" onclick="removeLinkedSection('${containerId}','${item.id}','${kind}')">Remove this line</button>
+      </div>
+      <div class="tabrow linked-row" style="margin-top:10px;">${cards || `<span class="chip-empty">Nothing linked yet.</span>`}</div>
+      <div class="link-controls">
+        <select id="linkSelect-${kind}-${item.id}">
+          <option value="">Choose existing…</option>
+          ${options}
+        </select>
+        <button class="btn small" onclick="linkExistingItem('${containerId}','${item.id}', document.getElementById('linkSelect-${kind}-${item.id}').value, '${kind}')">Link</button>
+        <button class="btn small solid" onclick="addNewLinkedItem('${containerId}','${item.id}','${kind}')">${cfg.newLabel}</button>
+      </div>
+    </div>`;
+}
+function removeLinkedSection(containerId, itemId, kind){
+  const arr = getDataArr(containerId);
+  const item = arr.find(x=>x.id===itemId);
+  item['hide_'+LINK_TARGETS[kind].field] = true;
+  markDirty();
+  openModal(containerId, itemId);
+}
+function restoreLinkedSection(containerId, itemId, kind){
+  const arr = getDataArr(containerId);
+  const item = arr.find(x=>x.id===itemId);
+  item['hide_'+LINK_TARGETS[kind].field] = false;
+  markDirty();
+  openModal(containerId, itemId);
+}
+function linkExistingItem(containerId, itemId, targetId, kind){
+  if(!targetId) return;
+  const arr = getDataArr(containerId);
+  const item = arr.find(x=>x.id===itemId);
+  const field = LINK_TARGETS[kind].field;
+  if(!item[field]) item[field] = [];
+  if(!item[field].some(l=>l.id===targetId)) item[field].push({id:targetId, thumb:''});
+  markDirty();
+  openModal(containerId, itemId);
+}
+function unlinkItem(containerId, itemId, targetId, kind){
+  const arr = getDataArr(containerId);
+  const item = arr.find(x=>x.id===itemId);
+  const field = LINK_TARGETS[kind].field;
+  item[field] = (item[field]||[]).filter(l=>l.id!==targetId);
+  markDirty();
+  openModal(containerId, itemId);
+}
+function addNewLinkedItem(containerId, itemId, kind){
+  const cfg = LINK_TARGETS[kind];
+  const label = prompt(`Name the new ${kind}:`);
+  if(!label) return;
+  const id = kind+'-'+Date.now();
+  if(kind==='project'){
+    projects.push({id, label, date:'', body:'Add a description here.', fileName:'', fileUrl:'', link:'', photos:[{src:'',size:'sm'},{src:'',size:'sm'},{src:'',size:'sm'},{src:'',size:'sm'}]});
+  } else {
+    trips.push({id, label, date:'', body:'Add a description here.', linkedProjects:[], photos:[{src:'',size:'sm'},{src:'',size:'sm'},{src:'',size:'sm'},{src:'',size:'sm'}]});
+  }
+  const arr = getDataArr(containerId);
+  const item = arr.find(x=>x.id===itemId);
+  if(!item[cfg.field]) item[cfg.field] = [];
+  item[cfg.field].push({id, thumb:''});
+  markDirty();
+  renderTabRow(cfg.containerId, cfg.getArr(), cfg.cardClass, true);
+  applyEditState();
+  openModal(containerId, itemId);
+}
+
+function addPhoto(containerId, itemId){
+  const arr = getDataArr(containerId);
+  const item = arr.find(x=>x.id===itemId);
+  if(!item.photos) item.photos = [];
+  const newCount = item.photos.length + 1;
+  const size = newCount===1 ? 'lg' : newCount===2 ? 'md' : 'sm';
+  item.photos.push({src:'', size});
+  markDirty();
+  openModal(containerId, itemId);
+}
+function deletePhoto(containerId, itemId, idx){
+  const arr = getDataArr(containerId);
+  const item = arr.find(x=>x.id===itemId);
+  item.photos.splice(idx,1);
+  if(item.photos.length===1){ item.photos[0].size='lg'; delete item.photos[0].width; delete item.photos[0].height; }
+  else if(item.photos.length===2) item.photos.forEach(p=>{ if(p.size==='sm'){ p.size='md'; delete p.width; delete p.height; } });
+  markDirty();
+  openModal(containerId, itemId);
+}
+
+function renderTabRow(containerId, data, cssClass, hasDate){
+  const row = document.getElementById(containerId);
+  const editingNow = document.body.classList.contains('editing');
+  const displayList = editingNow ? data : data.filter(it=>!it.hidden);
+  row.innerHTML = displayList.map((item,i)=>`
+    <div class="tabcard ${cssClass}${item.hidden ? ' tab-hidden' : ''}" data-id="${item.id}" draggable="true"
+        onclick="openModal('${containerId}','${item.id}')"
+        ondragstart="onTabDragStart(event,'${containerId}',${i})"
+        ondragend="onTabDragEnd(event)"
+        ondragover="onTabDragOver(event)"
+        ondrop="onTabDrop(event,'${containerId}',${i})">
+      <span class="tabdelete" onclick="event.stopPropagation(); deleteTab('${containerId}','${item.id}')">×</span>
+      <button type="button" class="tab-hide-btn" onclick="event.stopPropagation(); toggleTabHidden('${containerId}','${item.id}')">${item.hidden ? '👁 Show' : '🚫 Hide'}</button>
+      <div class="tnum">${pad(i+1)}</div>
+      <div class="tlabel editable" contenteditable="false" data-key="tlabel-${item.id}" onclick="event.stopPropagation()">${item.label}</div>
+      ${hasDate ? `<div class="tdate editable" contenteditable="false" data-key="tdate-${item.id}" onclick="event.stopPropagation()">${item.date||'&nbsp;'}</div>` : ''}
+      <div class="tab-viewcue">${item.hidden ? 'Hidden from visitors' : 'View Details →'}</div>
+    </div>
+  `).join('');
+  displayList.forEach(item=>{
+    const card = row.querySelector(`[data-id="${item.id}"]`);
+    if(!card) return;
+    const labelEl = card.querySelector('.tlabel');
+    if(labelEl) labelEl.addEventListener('input', ()=>{ item.label = labelEl.textContent; });
+    const dateEl = card.querySelector('.tdate');
+    if(dateEl) dateEl.addEventListener('input', ()=>{ item.date = dateEl.textContent; });
+  });
+}
+function toggleTabHidden(containerId, itemId){
+  const arr = getDataArr(containerId);
+  const item = arr.find(x=>x.id===itemId);
+  item.hidden = !item.hidden;
+  markDirty();
+  renderAllTabs();
+  applyEditState();
+}
+let tabDragInfo = null;
+function onTabDragStart(e, containerId, idx){
+  if(!document.body.classList.contains('editing')){ e.preventDefault(); return; }
+  tabDragInfo = {containerId, idx};
+  e.dataTransfer.effectAllowed = 'move';
+  e.currentTarget.classList.add('dragging');
+}
+function onTabDragEnd(e){
+  e.currentTarget.classList.remove('dragging');
+}
+function onTabDragOver(e){
+  if(document.body.classList.contains('editing')) e.preventDefault();
+}
+function onTabDrop(e, containerId, idx){
+  if(!document.body.classList.contains('editing')) return;
+  e.preventDefault();
+  if(!tabDragInfo || tabDragInfo.containerId!==containerId || tabDragInfo.idx===idx){ tabDragInfo=null; return; }
+  const arr = getDataArr(containerId);
+  const [moved] = arr.splice(tabDragInfo.idx,1);
+  arr.splice(idx,0,moved);
+  tabDragInfo = null;
+  markDirty();
+  renderAllTabs();
+  applyEditState();
+}
+
+function getDataArr(containerId){
+  if(containerId==='expertiseTabs') return expertise;
+  if(containerId==='tripsTabs') return trips;
+  if(containerId==='projectsTabs') return projects;
+}
+
+function renderAllTabs(){
+  renderTabRow('expertiseTabs', expertise, 'badge', false);
+  renderTabRow('tripsTabs', trips, 'ticket', true);
+  renderTabRow('projectsTabs', projects, 'folder', true);
+}
+
+function openModal(containerId, itemId){
+  const arr = getDataArr(containerId);
+  const item = arr.find(x=>x.id===itemId);
+  if(!item) return;
+  const backdrop = document.getElementById('modalBackdrop');
+  const content = document.getElementById('modalContent');
+
+  let extra = '';
+  if(containerId==='projectsTabs'){
+    const hasLink = item.link && item.link.trim() !== '';
+    extra = `
+      <div class="proj-file">
+        <div class="proj-upload-controls">
+          <button class="btn small" onclick="document.getElementById('projFile-${item.id}').click()">⤒ Upload File</button>
+          <input type="file" id="projFile-${item.id}" style="display:none;" onchange="handleProjectFile(event,'${item.id}')">
+          <span id="projFileName-${item.id}" style="font-family:var(--font-mono); font-size:.75rem; margin-left:8px;">${item.fileName||''}</span>
+        </div>
+        ${item.fileUrl ? `<a class="btn small filebtn" href="${item.fileUrl}" target="_blank" download="${item.fileName}">↗ View File</a>` : ''}
+        <div class="editable proj-link-line" contenteditable="false" style="margin-top:14px; font-family:var(--font-mono); font-size:.75rem; ${hasLink ? '' : 'display:none;'}" data-key="proj-link-${item.id}">${item.link || 'Paste a link to the hosted file here.'}</div>
+      </div>
+      ${galleryHTML(containerId, item)}`;
+  } else {
+    extra = galleryHTML(containerId, item) + linkedItemsHTML(containerId, item, 'project');
+    if(containerId==='expertiseTabs') extra += linkedItemsHTML(containerId, item, 'trip');
+  }
+
+  content.innerHTML = `
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h3 class="editable" contenteditable="false" data-key="title-${item.id}">${item.label}</h3>
+    ${item.date!==undefined ? `<div class="mdate editable" contenteditable="false" data-key="date-${item.id}">${item.date}</div>` : ''}
+    <div class="modal-body editable" contenteditable="false" data-key="modalbody-${item.id}">${item.bodyHtml || item.body.split('\n\n').map(p=>`<p>${p.replace(/\n/g,'<br>')}</p>`).join('')}</div>
+    ${extra}
+  `;
+  backdrop.classList.add('open');
+  applyEditState();
+  attachImgSlotHandlers(content);
+  attachResizeHandles(content);
+
+  const titleEl = content.querySelector(`[data-key="title-${item.id}"]`);
+  if(titleEl) titleEl.addEventListener('input', ()=>{ item.label = titleEl.textContent; });
+  const dateEl = content.querySelector(`[data-key="date-${item.id}"]`);
+  if(dateEl) dateEl.addEventListener('input', ()=>{ item.date = dateEl.textContent; });
+  const bodyEl = content.querySelector(`[data-key="modalbody-${item.id}"]`);
+  if(bodyEl) bodyEl.addEventListener('input', ()=>{ item.bodyHtml = bodyEl.innerHTML; });
+  if(containerId==='projectsTabs'){
+    const linkEl = content.querySelector(`[data-key="proj-link-${item.id}"]`);
+    if(linkEl) linkEl.addEventListener('input', ()=>{ item.link = linkEl.innerHTML; });
+  }
+}
+function closeModal(){
+  document.getElementById('modalBackdrop').classList.remove('open');
+}
+document.getElementById('modalBackdrop').addEventListener('click', e=>{
+  if(e.target.id==='modalBackdrop') closeModal();
+});
+
+function handleProjectFile(e, id){
+  const file = e.target.files[0];
+  if(!file) return;
+  const url = URL.createObjectURL(file);
+  const proj = projects.find(p=>p.id===id);
+  proj.fileUrl = url;
+  proj.fileName = file.name;
+  document.getElementById('projFileName-'+id).textContent = file.name;
+  markDirty();
+  openModal('projectsTabs', id);
+}
+
+function addTab(containerId){
+  const arr = getDataArr(containerId);
+  const label = prompt('Name this tab:');
+  if(!label) return;
+  const id = containerId+'-'+Date.now();
+  const base = {id, label, date:'', body:'Add a description here.', photos:[{src:'',size:'sm'},{src:'',size:'sm'},{src:'',size:'sm'},{src:'',size:'sm'}]};
+  if(containerId==='projectsTabs'){ base.fileName=''; base.fileUrl=''; base.link=''; }
+  else { base.linkedProjects = []; }
+  arr.push(base);
+  markDirty();
+  renderAllTabs();
+  applyEditState();
+}
+function deleteTab(containerId, itemId){
+  if(!confirm('Remove this tab?')) return;
+  const arr = getDataArr(containerId);
+  const idx = arr.findIndex(x=>x.id===itemId);
+  if(idx>-1) arr.splice(idx,1);
+  if(containerId==='projectsTabs'){
+    [...expertise, ...trips].forEach(it=>{ if(it.linkedProjects) it.linkedProjects = it.linkedProjects.filter(l=>l.id!==itemId); });
+  }
+  if(containerId==='tripsTabs'){
+    expertise.forEach(it=>{ if(it.linkedTrips) it.linkedTrips = it.linkedTrips.filter(l=>l.id!==itemId); });
+  }
+  renderAllTabs();
+  markDirty();
+  applyEditState();
+}
+document.getElementById('addExpertise').onclick = ()=>addTab('expertiseTabs');
+document.getElementById('addTrip').onclick = ()=>addTab('tripsTabs');
+document.getElementById('addProject').onclick = ()=>addTab('projectsTabs');
+
+function renderExperience(){
+  const list = document.getElementById('expList');
+  list.innerHTML = experience.map((e,i)=>`
+    <div class="exp-row">
+      <div class="exp-logo imgslot" data-key="explogo-${i}"><img style="display:none;"><span>Logo</span></div>
+      <div class="exp-info">
+        <div class="exp-company editable" contenteditable="false" data-key="expco-${i}">${e.company}</div>
+        <div class="exp-title editable" contenteditable="false" data-key="exptitle-${i}">${e.title}</div>
+      </div>
+      <div class="exp-dates editable" contenteditable="false" data-key="expdate-${i}">${e.dates}</div>
+    </div>
+  `).join('');
+}
+
+function renderEducation(){
+  const list = document.getElementById('eduList');
+  list.innerHTML = education.map((e,i)=>`
+    <div class="exp-row">
+      <span class="tabdelete" style="position:static; margin-right:6px; flex:0 0 auto;" onclick="deleteEducation('${e.id}')">×</span>
+      <div class="exp-logo imgslot" data-key="edulogo-${e.id}"><img style="display:none;"><span>Logo</span></div>
+      <div class="exp-info">
+        <div class="exp-company editable" contenteditable="false" data-key="eduschool-${e.id}">${e.school}</div>
+        <div class="exp-title editable" contenteditable="false" data-key="edudegree-${e.id}">${e.degree}</div>
+        <div class="edu-meta">
+          <span class="edu-tag">Major: <span class="editable" contenteditable="false" data-key="edumajor-${e.id}">${e.major||''}</span></span>
+          <span class="edu-tag">Class of <span class="editable" contenteditable="false" data-key="edugrad-${e.id}">${e.gradYear||''}</span></span>
+        </div>
+      </div>
+      <div class="exp-dates editable" contenteditable="false" data-key="edudates-${e.id}">${e.dates}</div>
+    </div>
+  `).join('');
+  education.forEach(e=>{
+    const schoolEl = list.querySelector(`[data-key="eduschool-${e.id}"]`);
+    if(schoolEl) schoolEl.addEventListener('input', ()=>{ e.school = schoolEl.textContent; });
+    const degreeEl = list.querySelector(`[data-key="edudegree-${e.id}"]`);
+    if(degreeEl) degreeEl.addEventListener('input', ()=>{ e.degree = degreeEl.textContent; });
+    const datesEl = list.querySelector(`[data-key="edudates-${e.id}"]`);
+    if(datesEl) datesEl.addEventListener('input', ()=>{ e.dates = datesEl.textContent; });
+    const majorEl = list.querySelector(`[data-key="edumajor-${e.id}"]`);
+    if(majorEl) majorEl.addEventListener('input', ()=>{ e.major = majorEl.textContent; });
+    const gradEl = list.querySelector(`[data-key="edugrad-${e.id}"]`);
+    if(gradEl) gradEl.addEventListener('input', ()=>{ e.gradYear = gradEl.textContent; });
+  });
+}
+function addEducation(){
+  education.push({id:'edu-'+Date.now(), school:'New School', degree:'Degree / Program', major:'Major', gradYear:'Year', dates:'Dates'});
+  markDirty();
+  renderEducation();
+  applyEditState();
+}
+function deleteEducation(id){
+  if(!confirm('Remove this education entry?')) return;
+  const idx = education.findIndex(e=>e.id===id);
+  if(idx>-1) education.splice(idx,1);
+  markDirty();
+  renderEducation();
+  applyEditState();
+}
+document.getElementById('addEducation').onclick = addEducation;
+
+function renderStats(){
+  const wrap = document.getElementById('scoreboardWrap');
+  wrap.innerHTML = stats.map(s=>`
+    <div class="scorecell">
+      <span class="stat-delete" onclick="deleteStat('${s.id}')">×</span>
+      <div class="scorenum editable" contenteditable="false" data-key="statnum-${s.id}">${s.num}</div>
+      <div class="scorelabel editable" contenteditable="false" data-key="statlabel-${s.id}">${s.label}</div>
+    </div>
+  `).join('');
+  stats.forEach(s=>{
+    const numEl = wrap.querySelector(`[data-key="statnum-${s.id}"]`);
+    if(numEl) numEl.addEventListener('input', ()=>{ s.num = numEl.textContent; });
+    const labelEl = wrap.querySelector(`[data-key="statlabel-${s.id}"]`);
+    if(labelEl) labelEl.addEventListener('input', ()=>{ s.label = labelEl.textContent; });
+  });
+}
+function addStat(){
+  stats.push({id:'stat-'+Date.now(), num:'0', label:'New Stat'});
+  markDirty();
+  renderStats();
+  applyEditState();
+}
+function deleteStat(id){
+  if(stats.length<=1){ alert('Keep at least one stat.'); return; }
+  if(!confirm('Remove this stat?')) return;
+  const idx = stats.findIndex(s=>s.id===id);
+  if(idx>-1) stats.splice(idx,1);
+  markDirty();
+  renderStats();
+  applyEditState();
+}
+document.getElementById('addStat').onclick = addStat;
+
+/* ============================================================
+   IMAGE UPLOAD HANDLING
+============================================================ */
+function attachImgSlotHandlers(scope){
+  scope.querySelectorAll('.imgslot').forEach(slot=>{
+    slot.onclick = ()=>{
+      if(!document.body.classList.contains('editing')) return;
+      const input = document.createElement('input');
+      input.type='file'; input.accept='image/*';
+      input.onchange = ()=>{
+        const file = input.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = ()=>{
+          markDirty();
+          if(slot.dataset.itemid){
+            const arr = getDataArr(slot.dataset.container);
+            const item = arr.find(x=>x.id===slot.dataset.itemid);
+            const idx = parseInt(slot.dataset.idx,10);
+            if(!item.photos[idx]) item.photos[idx] = {src:'', size:'sm'};
+            item.photos[idx].src = reader.result;
+            openModal(slot.dataset.container, slot.dataset.itemid);
+          } else {
+            const img = slot.querySelector('img');
+            img.src = reader.result;
+            img.style.display='block';
+            const label = slot.querySelector('span');
+            if(label) label.style.display='none';
+          }
+        };
+        reader.readAsDataURL(file);
+      };
+      input.click();
+    };
+  });
+}
+
+/* ============================================================
+   NAV LINKS (avoid navigating away while editing labels)
+============================================================ */
+function navClick(e){
+  if(document.body.classList.contains('editing')) e.preventDefault();
+}
+
+/* ============================================================
+   EDIT MODE
+============================================================ */
+let editing = false;
+
+/* ============================================================
+   TEXT FORMAT TOOLBAR (bold/italic/underline, font, size, color)
+============================================================ */
+const FT_COLORS = ['#0b1f3a','#bca779','#ffffff','#1a1a1a','#a33','#2a7a3b','#1f5fa8','#666666'];
+const FT_FONTS = [
+  {label:'Body', value:'Inter'},
+  {label:'Display', value:'Anton'},
+  {label:'Classic', value:'Georgia'},
+  {label:'Mono', value:'Courier New'},
+];
+function buildFormatToolbar(){
+  const div = document.createElement('div');
+  div.id = 'formatToolbar';
+  div.className = 'format-toolbar';
+  const fontBtns = FT_FONTS.map(f=>`<button type="button" class="fb" data-font="${f.value}" style="font-family:'${f.value}'">${f.label}</button>`).join('');
+  const sizeBtns = `
+    <button type="button" class="fb" data-size="2">S</button>
+    <button type="button" class="fb" data-size="3">M</button>
+    <button type="button" class="fb" data-size="5">L</button>
+    <button type="button" class="fb" data-size="7">XL</button>`;
+  const colorBtns = FT_COLORS.map(c=>`<button type="button" class="swatch" data-color="${c}" style="background:${c};"></button>`).join('');
+  div.innerHTML = `
+    <button type="button" class="fb" data-cmd="bold" title="Bold"><b>B</b></button>
+    <button type="button" class="fb" data-cmd="italic" title="Italic"><i>I</i></button>
+    <button type="button" class="fb" data-cmd="underline" title="Underline"><u>U</u></button>
+    <div class="fdiv"></div>
+    ${fontBtns}
+    <div class="fdiv"></div>
+    ${sizeBtns}
+    <div class="fdiv"></div>
+    ${colorBtns}
+    <button type="button" class="fb" data-custom-color="1" title="Custom color">🎨</button>
+    <div class="fdiv"></div>
+    <button type="button" class="fb" data-cmd="removeFormat" title="Clear formatting">⌫</button>
+  `;
+  document.body.appendChild(div);
+
+  div.querySelectorAll('.fb, .swatch').forEach(btn=>{
+    btn.addEventListener('mousedown', e=>e.preventDefault());
+  });
+  div.querySelectorAll('[data-cmd]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ document.execCommand(btn.dataset.cmd, false, null); markDirty(); });
+  });
+  div.querySelectorAll('[data-font]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ document.execCommand('fontName', false, btn.dataset.font); markDirty(); });
+  });
+  div.querySelectorAll('[data-size]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ document.execCommand('fontSize', false, btn.dataset.size); markDirty(); });
+  });
+  div.querySelectorAll('[data-color]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ document.execCommand('foreColor', false, btn.dataset.color); markDirty(); });
+  });
+  div.querySelector('[data-custom-color]').addEventListener('mousedown', e=>e.preventDefault());
+  div.querySelector('[data-custom-color]').addEventListener('click', ()=>{
+    const hex = prompt('Enter a hex color (e.g. #ff8800):', '#0b1f3a');
+    if(hex){ document.execCommand('foreColor', false, hex); markDirty(); }
+  });
+  return div;
+}
+const formatToolbar = buildFormatToolbar();
+function positionFormatToolbar(range){
+  const rect = range.getBoundingClientRect();
+  const tbRect = formatToolbar.getBoundingClientRect();
+  let top = window.scrollY + rect.top - tbRect.height - 10;
+  if(top < window.scrollY + 4) top = window.scrollY + rect.bottom + 10;
+  let left = window.scrollX + rect.left;
+  const maxLeft = window.scrollX + document.documentElement.clientWidth - tbRect.width - 8;
+  if(left > maxLeft) left = Math.max(8, maxLeft);
+  formatToolbar.style.top = top+'px';
+  formatToolbar.style.left = left+'px';
+}
+document.addEventListener('selectionchange', ()=>{
+  if(!editing){ formatToolbar.classList.remove('show'); return; }
+  const sel = window.getSelection();
+  if(!sel || sel.rangeCount===0 || sel.isCollapsed){ formatToolbar.classList.remove('show'); return; }
+  const node = sel.anchorNode;
+  const el = node && (node.nodeType===1 ? node : node.parentElement);
+  const editableAncestor = el && el.closest && el.closest('.editable[contenteditable="true"]');
+  if(!editableAncestor){ formatToolbar.classList.remove('show'); return; }
+  positionFormatToolbar(sel.getRangeAt(0));
+  formatToolbar.classList.add('show');
+});
+
+let hasUnsavedChanges = false;
+function markDirty(){
+  hasUnsavedChanges = true;
+  document.getElementById('saveBtnNav').classList.add('needs-save');
+}
+function clearDirty(){
+  hasUnsavedChanges = false;
+  document.getElementById('saveBtnNav').classList.remove('needs-save');
+}
+window.addEventListener('beforeunload', (e)=>{
+  if(hasUnsavedChanges){ e.preventDefault(); e.returnValue = ''; }
+});
+document.addEventListener('input', ()=>{ if(editing) markDirty(); }, true);
+function applyEditState(){
+  document.querySelectorAll('.editable').forEach(el=>el.setAttribute('contenteditable', editing ? 'true':'false'));
+  attachImgSlotHandlers(document);
+}
+function toggleEditMode(){
+  editing = !editing;
+  document.body.classList.toggle('editing', editing);
+  document.getElementById('editBar').classList.toggle('on', editing);
+  document.getElementById('editToggle').textContent = editing ? 'Exit Edit Mode' : 'Edit Mode';
+  applyEditState();
+  const sel = window.getSelection();
+  if(sel) sel.removeAllRanges();
+}
+document.getElementById('editToggle').onclick = toggleEditMode;
+
+/* ============================================================
+   SECRET UNLOCK GESTURE — triple-click the nav name
+============================================================ */
+(function(){
+  let clicks = 0, timer = null;
+  document.querySelector('#nav .brand').addEventListener('click', ()=>{
+    clicks++;
+    clearTimeout(timer);
+    timer = setTimeout(()=>{ clicks = 0; }, 600);
+    if(clicks >= 3){
+      clicks = 0;
+      clearTimeout(timer);
+      toggleEditMode();
+    }
+  });
+})();
+
+/* ============================================================
+   FONT PAIRINGS
+============================================================ */
+const fontPairs = {
+  stadium:{display:"'Anton', sans-serif", body:"'Inter', sans-serif"},
+  playbook:{display:"'Oswald', sans-serif", body:"'Source Sans 3', sans-serif"},
+  scoreboard:{display:"'Bebas Neue', sans-serif", body:"'Inter', sans-serif"},
+};
+document.getElementById('fontSelect').onchange = (e)=>{
+  const p = fontPairs[e.target.value];
+  document.documentElement.style.setProperty('--font-display', p.display);
+  document.documentElement.style.setProperty('--font-body', p.body);
+  markDirty();
+};
+
+/* ============================================================
+   CONTACT LINK SYNC (keep href in step with edited text)
+============================================================ */
+function syncContactLinks(){
+  const emailEl = document.querySelector('[data-key="contact-email-text"]');
+  const phoneEl = document.querySelector('[data-key="contact-phone-text"]');
+  const liEl = document.querySelector('[data-key="contact-linkedin-text"]');
+  if(emailEl) emailEl.addEventListener('blur', ()=>{ document.querySelector('[data-key="contact-email"]').href = 'mailto:'+emailEl.textContent.trim(); });
+  if(phoneEl) phoneEl.addEventListener('blur', ()=>{ document.querySelector('[data-key="contact-phone"]').href = 'tel:'+phoneEl.textContent.replace(/[^0-9+]/g,''); });
+  if(liEl) liEl.addEventListener('blur', ()=>{
+    let v = liEl.textContent.trim();
+    if(!v.startsWith('http')) v = 'https://'+v;
+    document.querySelector('[data-key="contact-linkedin"]').href = v;
+  });
+}
+syncContactLinks();
+
+/* ============================================================
+   CONTACT FORM (mailto fallback)
+============================================================ */
+function sendContact(e){
+  e.preventDefault();
+  const f = e.target;
+  const email = document.querySelector('[data-key="contact-email-text"]').textContent.trim();
+  const subject = encodeURIComponent('Portfolio contact from ' + f.name.value);
+  const body = encodeURIComponent(f.message.value + '\n\n— ' + f.name.value + ' (' + f.email.value + ')');
+  window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+  return false;
+}
+
+/* ============================================================
+   RESUME UPLOAD (edit mode)
+============================================================ */
+const resumeLink = document.getElementById('resumeLink');
+resumeLink.addEventListener('click', (e)=>{
+  if(editing){
+    e.preventDefault();
+    document.getElementById('resumeInput').click();
+  } else if(!resumeLink.dataset.hasFile){
+    e.preventDefault();
+    alert('No resume uploaded yet. Toggle Edit Mode to upload one.');
+  }
+});
+document.getElementById('resumeInput').addEventListener('change', (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    resumeLink.href = reader.result;
+    resumeLink.download = file.name;
+    resumeLink.dataset.hasFile = '1';
+    markDirty();
+  };
+  reader.readAsDataURL(file);
+});
+
+/* ============================================================
+   SAVE / LOAD SITE DATA
+============================================================ */
+const SAVE_CONTAINERS = ['hero','fundGrid','expList']; // structural containers refreshed by data model
+function collectEditableText(){
+  const out = {};
+  document.querySelectorAll('[data-key]').forEach(el=>{
+    if(el.tagName === 'IMG') return;
+    if(el.classList.contains('imgslot')){
+      const img = el.querySelector('img');
+      if(img && img.src && img.style.display!=='none') out[el.dataset.key] = {type:'img', src:img.src};
+    } else if(el.tagName === 'A'){
+      out[el.dataset.key] = {type:'href', href:el.getAttribute('href')};
+    } else {
+      out[el.dataset.key] = {type:'html', html:el.innerHTML};
+    }
+  });
+  return out;
+}
+function exportSite(){
+  const data = {
+    editableText: collectEditableText(),
+    expertise, trips, projects, fundamentals, experience, education, stats,
+    font: document.getElementById('fontSelect').value,
+    resumeHref: resumeLink.dataset.hasFile ? resumeLink.href : ''
+  };
+  const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'portfolio-data.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  clearDirty();
+}
+document.getElementById('saveBtnNav').onclick = exportSite;
+document.getElementById('loadBtnNav').onclick = ()=>document.getElementById('loadInputNav').click();
+document.getElementById('loadInputNav').onchange = (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    try{
+      const data = JSON.parse(reader.result);
+      applyImportedData(data);
+    }catch(err){
+      alert('Could not read that file. Make sure it is a portfolio-data.json export.');
+    }
+  };
+  reader.readAsText(file);
+};
+function applyImportedData(data){
+  if(data.expertise) { expertise.length=0; expertise.push(...data.expertise); }
+  if(data.trips) { trips.length=0; trips.push(...data.trips); }
+  if(data.projects) { projects.length=0; projects.push(...data.projects); }
+  if(data.fundamentals) { fundamentals.length=0; fundamentals.push(...data.fundamentals); }
+  if(data.experience) { experience.length=0; experience.push(...data.experience); }
+  if(data.education) { education.length=0; education.push(...data.education); }
+  if(data.stats) { stats.length=0; stats.push(...data.stats); }
+  [...expertise, ...trips, ...projects].forEach(normalizePhotos);
+  [...expertise, ...trips].forEach(it=>normalizeLinks(it,'linkedProjects'));
+  expertise.forEach(it=>normalizeLinks(it,'linkedTrips'));
+  projects.forEach(p=>{ if(p.date===undefined) p.date = ''; });
+  renderFundamentals();
+  renderAllTabs();
+  renderExperience();
+  renderEducation();
+  renderStats();
+  applyEditState();
+  if(data.editableText){
+    Object.entries(data.editableText).forEach(([key,val])=>{
+      const el = document.querySelector(`[data-key="${key}"]`);
+      if(!el) return;
+      if(val.type==='html') el.innerHTML = val.html;
+      if(val.type==='href') el.setAttribute('href', val.href);
+      if(val.type==='img'){
+        const img = el.querySelector('img');
+        if(img){ img.src = val.src; img.style.display='block'; const l=el.querySelector('span'); if(l) l.style.display='none'; }
+      }
+    });
+  }
+  if(data.font){ document.getElementById('fontSelect').value = data.font; document.getElementById('fontSelect').dispatchEvent(new Event('change')); }
+  if(data.resumeHref){ resumeLink.href = data.resumeHref; resumeLink.dataset.hasFile='1'; }
+  clearDirty();
+  alert('Site data loaded.');
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+renderFundamentals();
+renderAllTabs();
+renderExperience();
+renderEducation();
+renderStats();
+applyEditState();
+
+/* ============================================================
+   SLOW AUTO-SCROLLING CAROUSEL MOTION
+============================================================ */
+function setupAutoScroll(row){
+  if(!row) return;
+  let direction = 1;
+  let paused = false;
+  row.addEventListener('mouseenter', ()=>{ paused = true; });
+  row.addEventListener('mouseleave', ()=>{ paused = false; });
+  row.addEventListener('touchstart', ()=>{ paused = true; }, {passive:true});
+  function step(){
+    if(!paused && !document.body.classList.contains('editing')){
+      const max = row.scrollWidth - row.clientWidth;
+      if(max > 1){
+        row.scrollLeft += direction * 0.4;
+        if(row.scrollLeft >= max) direction = -1;
+        else if(row.scrollLeft <= 0) direction = 1;
+      }
+    }
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+['expertiseTabs','tripsTabs','projectsTabs'].forEach(id=>setupAutoScroll(document.getElementById(id)));
+
+</script>
+</body>
+</html>
